@@ -20,14 +20,14 @@ import java.util.stream.Collectors;
  * LDAP connector using the UnboundId LDAP SDK licensed under LGPL 2.1
  * See: https://www.ldap.com/unboundid-ldap-sdk-for-java
  */
-public class UnboundIdLdapConnector implements LoginProvider {
+public class LdapConnector implements LoginProvider {
 
-    private static final Logger log = LogManager.getLogger(UnboundIdLdapConnector.class);
+    private static final Logger log = LogManager.getLogger(LdapConnector.class);
 
 
     LdapConfig ldapConfig;
 
-    public UnboundIdLdapConnector(LdapConfig ldapConfig) {
+    public LdapConnector(LdapConfig ldapConfig) {
         this.ldapConfig = ldapConfig;
     }
 
@@ -90,7 +90,7 @@ public class UnboundIdLdapConnector implements LoginProvider {
         XmlMapper mapper = new XmlMapper();
         LdapConfig ldapConfig = mapper.readValue(new File("ldap-config.xml"), LdapConfig.class);
 
-        UnboundIdLdapConnector ldapConnector = new UnboundIdLdapConnector(ldapConfig);
+        LdapConnector ldapConnector = new LdapConnector(ldapConfig);
         LdapResult result = ldapConnector.connect(username, password);
         mapper.writerWithDefaultPrettyPrinter().writeValue(System.out, result);
         System.out.println("\n");

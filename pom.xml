@@ -76,7 +76,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>com.dewarim.cinnamon.ldap.UnboundIdLdapConnector</mainClass>
+                    <mainClass>com.dewarim.cinnamon.ldap.LdapConnector</mainClass>
                 </configuration>
             </plugin>
             <plugin>
