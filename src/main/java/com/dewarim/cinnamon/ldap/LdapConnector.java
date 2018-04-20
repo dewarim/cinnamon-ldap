@@ -1,8 +1,9 @@
 package com.dewarim.cinnamon.ldap;
 
-import com.dewarim.cinnamon.configuration.GroupMapping;
-import com.dewarim.cinnamon.configuration.LoginProvider;
-import com.dewarim.cinnamon.configuration.LoginResult;
+import com.dewarim.cinnamon.api.login.GroupMapping;
+import com.dewarim.cinnamon.api.login.LoginProvider;
+import com.dewarim.cinnamon.api.login.LoginResult;
+import com.dewarim.cinnamon.api.login.LoginUser;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.unboundid.ldap.sdk.*;
@@ -31,7 +32,8 @@ public class LdapConnector implements LoginProvider {
         this.ldapConfig = ldapConfig;
     }
 
-    public LdapResult connect(String username, String password) {
+    public LdapResult connect(LoginUser user, String password) {
+        String username = user.getUsername();
         LDAPConnection conn = null;
         try {
             log.debug("Connecting to {}:{} with '{}' for user '{}'", 
@@ -81,17 +83,38 @@ public class LdapConnector implements LoginProvider {
     }
 
     public static void main(String[] args) throws IOException {
-        String username = "John Doe";
-        String password = "Dohn.Joe_1";
+        final String username;
+        final String password;
         if (args.length == 2) {
             username = args[0];
             password = args[1];
+        }
+        else{
+            username = "John Doe";
+            password = "Dohn.Joe_1"; 
         }
         XmlMapper mapper = new XmlMapper();
         LdapConfig ldapConfig = mapper.readValue(new File("ldap-config.xml"), LdapConfig.class);
 
         LdapConnector ldapConnector = new LdapConnector(ldapConfig);
-        LdapResult result = ldapConnector.connect(username, password);
+        LoginUser loginUser = new LoginUser() {
+            
+            @Override
+            public String getLoginType() {
+                return "LDAP";
+            }
+
+            @Override
+            public String getUsername() {
+                return username;
+            }
+
+            @Override
+            public String getPasswordHash() {
+                return null;
+            }
+        };
+        LdapResult result = ldapConnector.connect(loginUser, password);
         mapper.writerWithDefaultPrettyPrinter().writeValue(System.out, result);
         System.out.println("\n");
     }
@@ -101,6 +124,7 @@ public class LdapConnector implements LoginProvider {
         private String errorMessage;
         private boolean validUser;
         private List<GroupMapping> groupMappings = Collections.emptyList();
+        
 
         public LdapResult(String errorMessage) {
             this.errorMessage = errorMessage;
@@ -117,6 +141,11 @@ public class LdapConnector implements LoginProvider {
 
         public void setValidUser(boolean validUser) {
             this.validUser = validUser;
+        }
+
+        @Override
+        public boolean groupMappingsImplemented() {
+            return true;
         }
 
         public List<GroupMapping> getGroupMappings() {
@@ -136,4 +165,8 @@ public class LdapConnector implements LoginProvider {
         }
     }
 
+    @Override
+    public String getName() {
+        return "LDAP";
+    }
 }

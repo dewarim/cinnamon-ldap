@@ -1,6 +1,6 @@
 package com.dewarim.cinnamon.ldap;
 
-import com.dewarim.cinnamon.configuration.GroupMapping;
+import com.dewarim.cinnamon.api.login.GroupMapping;
 
 import java.util.ArrayList;
 import java.util.List;
