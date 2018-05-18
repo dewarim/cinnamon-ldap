@@ -14,6 +14,24 @@ The LDAPConnector implements the LoginProvider interface of the Cinnamon CMS.
 See the example [ldap-config.xml](ldap-config.xml) 
 as well as the commented [LdapConfig class](src/main/java/com/dewarim/cinnamon/ldap/LdapConfig.java).
 
+## Usage (command line)
+
+(with Java 8)
+
+    # build with maven 3:
+    mvn clean assembly:assembly
+    
+    # invoke:
+    java -cp target/cinnamon-api-jar-with-dependencies.jar com.dewarim.cinnamon.ldap.LdapConnector $userName $userPassword
+
+(with Java 9 - currently not enabled)
+    
+    # build with maven 3:
+    mvn clean assembly:assembly
+    
+    # invoke:
+    java -cp target/cinnamon-api-jar-with-dependencies.jar com.dewarim.cinnamon.ldap.LdapConnector $userName $userPassword
+
 ## License
  
 To be determined.
