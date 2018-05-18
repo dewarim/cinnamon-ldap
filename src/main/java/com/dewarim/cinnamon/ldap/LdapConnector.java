@@ -75,7 +75,11 @@ public class LdapConnector implements LoginProvider {
     }
 
     private String getBaseDn(String username) {
-        return String.format(ldapConfig.getBindDnFormatString(), username);
+        return String.format(ldapConfig.getBindDnFormatString(), escapeUsername(username));
+    }
+    
+    private String escapeUsername(String username){
+        return username.replace(",","\\,");
     }
 
     private String getSearchBaseDn(String groupName) {
