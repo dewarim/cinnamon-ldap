@@ -50,7 +50,12 @@ public class LdapConfig {
      */
     private String searchAttribute = "member";
 
-
+    /**
+     * The name of the UI language for new users.
+     * This must be a language code that is used in the Cinnamon database in the ui_languages table.
+     */
+    private String defaultLanguageCode = "und";
+    
     private List<GroupMapping> groupMappings = new ArrayList<>();
 
     public String getHost() {
@@ -109,5 +114,8 @@ public class LdapConfig {
         this.groupMappings = groupMappings;
     }
 
-  
+    public String getDefaultLanguageCode() {
+        return defaultLanguageCode;
+    }
+
 }

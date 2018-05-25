@@ -26,14 +26,14 @@ public class LdapConnector implements LoginProvider {
     private static final Logger log = LogManager.getLogger(LdapConnector.class);
 
 
-    LdapConfig ldapConfig;
+    private LdapConfig ldapConfig;
 
     public LdapConnector(LdapConfig ldapConfig) {
         this.ldapConfig = ldapConfig;
     }
 
     public LdapResult connect(LoginUser user, String password) {
-        String username = user.getUsername();
+        String username = escapeUsername(user.getUsername());
         LDAPConnection conn = null;
         try {
             log.debug("Connecting to {}:{} with '{}' for user '{}'", 
@@ -45,7 +45,7 @@ public class LdapConnector implements LoginProvider {
                     .filter(groupMapping -> searchForGroup(connection, groupMapping.getExternalGroup(), username))
                     .collect(Collectors.toList());
 
-            return new LdapResult(!groupMappings.isEmpty(), groupMappings);
+            return new LdapResult(!groupMappings.isEmpty(), groupMappings, ldapConfig.getDefaultLanguageCode());
 
         } catch (Exception e) {
             log.warn("Failed to connect with LDAP server", e);
@@ -75,7 +75,7 @@ public class LdapConnector implements LoginProvider {
     }
 
     private String getBaseDn(String username) {
-        return String.format(ldapConfig.getBindDnFormatString(), escapeUsername(username));
+        return String.format(ldapConfig.getBindDnFormatString(), username);
     }
     
     private String escapeUsername(String username){
@@ -128,23 +128,20 @@ public class LdapConnector implements LoginProvider {
         private String errorMessage;
         private boolean validUser;
         private List<GroupMapping> groupMappings = Collections.emptyList();
-        
+        private String defaultLanguageCode;
 
         public LdapResult(String errorMessage) {
             this.errorMessage = errorMessage;
         }
 
-        public LdapResult(boolean validUser, List<GroupMapping> groupMappings) {
+        public LdapResult(boolean validUser, List<GroupMapping> groupMappings, String defaultLanguageCode) {
             this.validUser = validUser;
             this.groupMappings = groupMappings;
+            this.defaultLanguageCode = defaultLanguageCode;
         }
 
         public boolean isValidUser() {
             return validUser;
-        }
-
-        public void setValidUser(boolean validUser) {
-            this.validUser = validUser;
         }
 
         @Override
@@ -156,17 +153,15 @@ public class LdapConnector implements LoginProvider {
             return groupMappings;
         }
 
-        public void setGroupMappings(List<GroupMapping> groupMappings) {
-            this.groupMappings = groupMappings;
-        }
-
         public String getErrorMessage() {
             return errorMessage;
         }
 
-        public void setErrorMessage(String errorMessage) {
-            this.errorMessage = errorMessage;
+        @Override
+        public String getUiLanguageCode() {
+            return defaultLanguageCode;
         }
+
     }
 
     @Override

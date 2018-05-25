@@ -12,4 +12,5 @@
                 <cinnamonGroup>group-authors</cinnamonGroup>
             </groupMapping>
     </groupMappings>
+    <defaultLanguageCode>und</defaultLanguageCode>
 </ldapConfig>
