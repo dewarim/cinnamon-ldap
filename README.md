@@ -22,7 +22,7 @@ as well as the commented [LdapConfig class](src/main/java/com/dewarim/cinnamon/l
     mvn clean assembly:assembly
     
     # invoke:
-    java -cp target/cinnamon-api-jar-with-dependencies.jar com.dewarim.cinnamon.ldap.LdapConnector $userName $userPassword
+    java -cp target/cinnamon-ldap-jar-with-dependencies.jar com.dewarim.cinnamon.ldap.LdapConnector $userName $userPassword
 
 (with Java 9 - currently not enabled)
     
@@ -30,7 +30,7 @@ as well as the commented [LdapConfig class](src/main/java/com/dewarim/cinnamon/l
     mvn clean assembly:assembly
     
     # invoke:
-    java -cp target/cinnamon-api-jar-with-dependencies.jar com.dewarim.cinnamon.ldap.LdapConnector $userName $userPassword
+    java -cp target/cinnamon-ldap-jar-with-dependencies.jar com.dewarim.cinnamon.ldap.LdapConnector $userName $userPassword
 
 ## License
  
