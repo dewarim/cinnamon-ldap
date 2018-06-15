@@ -55,6 +55,14 @@ public class LdapConfig {
      * This must be a language code that is used in the Cinnamon database in the ui_languages table.
      */
     private String defaultLanguageCode = "und";
+
+    /**
+     * If you want to use a static bind string with a fixed password, you must set the staticBindPassword field
+     * with a non-empty String value.
+     * <b>WARNING</b>: This means anyone who knows a valid user's login name will be able to login as that user.
+     * Only recommended in fully trusted environments or for testing and initial batch-scripted user generation.
+     */
+    private String staticBindPassword = null;
     
     private List<GroupMapping> groupMappings = new ArrayList<>();
 
@@ -118,4 +126,34 @@ public class LdapConfig {
         return defaultLanguageCode;
     }
 
+    public void setDefaultLanguageCode(String defaultLanguageCode) {
+        this.defaultLanguageCode = defaultLanguageCode;
+    }
+
+    public String getStaticBindPassword() {
+        return staticBindPassword;
+    }
+
+    public void setStaticBindPassword(String staticBindPassword) {
+        this.staticBindPassword = staticBindPassword;
+    }
+
+    public boolean useStaticBindPassword(){
+        return staticBindPassword != null && staticBindPassword.trim().length() > 0;
+    }
+
+    @Override
+    public String toString() {
+        return "LdapConfig{" +
+                "host='" + host + '\'' +
+                ", port=" + port +
+                ", bindDnFormatString='" + bindDnFormatString + '\'' +
+                ", searchBaseDnFormatString='" + searchBaseDnFormatString + '\'' +
+                ", searchFilter='" + searchFilter + '\'' +
+                ", searchAttribute='" + searchAttribute + '\'' +
+                ", defaultLanguageCode='" + defaultLanguageCode + '\'' +
+                ", staticBindPassword='" + staticBindPassword + '\'' +
+                ", groupMappings=" + groupMappings +
+                '}';
+    }
 }

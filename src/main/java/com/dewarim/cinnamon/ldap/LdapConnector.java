@@ -35,10 +35,16 @@ public class LdapConnector implements LoginProvider {
     public LdapResult connect(LoginUser user, String password) {
         String username = escapeUsername(user.getUsername());
         LDAPConnection conn = null;
+
+        String actualPassword = password;
+        if(ldapConfig.useStaticBindPassword()){
+            actualPassword = ldapConfig.getStaticBindPassword();
+        }
+
         try {
             log.debug("Connecting to {}:{} with '{}' for user '{}'", 
                     ldapConfig.getHost(), ldapConfig.getPort(), getBaseDn(username), username);
-            conn = new LDAPConnection(ldapConfig.getHost(), ldapConfig.getPort(), getBaseDn(username), password);
+            conn = new LDAPConnection(ldapConfig.getHost(), ldapConfig.getPort(), getBaseDn(username), actualPassword);
             log.debug("connection: " + conn);
             final LDAPConnection connection = conn;
             List<GroupMapping> groupMappings = ldapConfig.getGroupMappings().stream()
