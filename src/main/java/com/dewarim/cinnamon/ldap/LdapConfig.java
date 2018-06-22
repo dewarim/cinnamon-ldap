@@ -48,7 +48,13 @@ public class LdapConfig {
      * Note: the expectation is currently that the returned searchResultEntry contains a list of
      * attribute "member" which is a String starting with CN=$username, for example: "CN=John Doe"
      */
-    private String searchAttribute = "member";
+    private String searchAttributeForGroup = "member";
+
+    /**
+     * After the initial connect and search for the user's group members,
+     * use the searchAttributeForDn to extract the user's actual ldap login name.
+     */
+    private String searchAttributeForDn = "distinguishedName";
 
     /**
      * The name of the UI language for new users.
@@ -106,12 +112,12 @@ public class LdapConfig {
         this.searchFilter = searchFilter;
     }
 
-    public String getSearchAttribute() {
-        return searchAttribute;
+    public String getSearchAttributeForGroup() {
+        return searchAttributeForGroup;
     }
 
-    public void setSearchAttribute(String searchAttribute) {
-        this.searchAttribute = searchAttribute;
+    public void setSearchAttributeForGroup(String searchAttributeForGroup) {
+        this.searchAttributeForGroup = searchAttributeForGroup;
     }
 
     public List<GroupMapping> getGroupMappings() {
@@ -142,6 +148,14 @@ public class LdapConfig {
         return staticBindPassword != null && staticBindPassword.trim().length() > 0;
     }
 
+    public String getSearchAttributeForDn() {
+        return searchAttributeForDn;
+    }
+
+    public void setSearchAttributeForDn(String searchAttributeForDn) {
+        this.searchAttributeForDn = searchAttributeForDn;
+    }
+
     @Override
     public String toString() {
         return "LdapConfig{" +
@@ -150,7 +164,8 @@ public class LdapConfig {
                 ", bindDnFormatString='" + bindDnFormatString + '\'' +
                 ", searchBaseDnFormatString='" + searchBaseDnFormatString + '\'' +
                 ", searchFilter='" + searchFilter + '\'' +
-                ", searchAttribute='" + searchAttribute + '\'' +
+                ", searchAttributeForGroup='" + searchAttributeForGroup + '\'' +
+                ", searchAttributeForDn='" + searchAttributeForDn + '\'' +
                 ", defaultLanguageCode='" + defaultLanguageCode + '\'' +
                 ", staticBindPassword='" + staticBindPassword + '\'' +
                 ", groupMappings=" + groupMappings +

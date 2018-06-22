@@ -4,8 +4,9 @@
     <port>389</port>
     <bindDnFormatString>cn=%s,cn=Users,dc=texolution,dc=test,dc=eu</bindDnFormatString>
     <searchBaseDnFormatString>cn=%s,cn=Users,dc=texolution,dc=test,dc=eu</searchBaseDnFormatString>
-    <searchFilter>(&amp;(objectclass=*))</searchFilter>
-    <searchAttribute>member</searchAttribute>
+    <searchFilter>(&amp;(objectCategory=Person)(objectClass=User)(sAMAccountName=%s))</searchFilter>
+    <searchAttributeForGroup>memberOf</searchAttributeForGroup>
+    <searchAttributeForDn>distinguishedName</searchAttributeForDn>
     <groupMappings>
             <groupMapping>
                 <externalGroup>retrieval-users</externalGroup>
